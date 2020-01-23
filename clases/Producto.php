@@ -14,8 +14,16 @@ class Producto
   private $descuento;
   private $img;
 
-  public function altaProducto(PDO $db, string $nombre, string $desc,float $precio,int $stock, int $marca, int $categoria, float $descuento, string $img)
+  public function altaProducto(string $img)
   {
+    $db=Conexion::conectar();
+    $nombre = $_POST["nombre"];
+    $desc = $_POST["descripcion"];
+    $precio= $_POST["precio"];
+    $stock = $_POST["stock"];
+    $marca = $_POST["marca"];
+    $categoria = $_POST["categoria"];
+    $descuento = $_POST["descuento"];
     try{
     $statement = $db->prepare("INSERT into productos(id_marca,id_categoria,nombre,descripcion,precio,cantidad,img,descuento) VALUES ( :idMarca, :idCategoria,:nombre, :descripcion, :precio, :cantidad, :img,:descuento)");
 
@@ -39,8 +47,9 @@ class Producto
  
   }
 
-  public function modificarProducto(PDO $db,int $id,string $nombre, string $desc,float $precio,int $stock, int $marca, int $categoria, float $descuento, string $img)
+  public function modificarProducto(int $id,string $nombre, string $desc,float $precio,int $stock, int $marca, int $categoria, float $descuento, string $img)
   {
+    $db=Conexion::conectar();
     try{
       $sql="UPDATE productos SET nombre=':nombre',descripcion=':descripcion',precio=:precio,cantidad=:cantidad,img=':img',descuento=:descuento,id_marca=:idMarca,id_categoria=:idCategoria WHERE id_producto = :id";
       $statement = $db->prepare($sql);
@@ -63,8 +72,9 @@ class Producto
         }
   }
 
-  public function borrarProducto(PDO $db, $id)
+  public function borrarProducto($id)
   {
+    $db=Conexion::conectar();
     try
     {
 
@@ -82,7 +92,46 @@ class Producto
     }
 
   }
-  
+  public function buscarPorId(int $id){
+    $db=Conexion::conectar();
+    if(isset($_POST["id"])){
+      $id=(int)$_POST["id"];  
+    }
+    try {
+      $sql = "SELECT id_producto as id,nombre,descripcion,precio,cantidad as stock,marca,categoria,descuento,img 
+        FROM productos as p
+          inner join categorias as c on p.id_categoria=c.id_categoria
+          inner join marcas as m on p.id_marca=m.id_marca WHERE id_producto= :id";
+      $seleccionado=$db->prepare($sql);
+      $seleccionado->bindValue(":id", $id,PDO::PARAM_INT);
+      $seleccionado->execute();
+      $variable = $seleccionado->fetchObject("Producto");//objeto
+      return $variable;
+    } catch (\Exception $e) {
+      $e->getMessage();
+      return false;
+    }
+  }
+  public function obtenerListaProductos(){
+    $db=Conexion::conectar();
+    try {
+      $sql = "SELECT id_producto as id,nombre,descripcion,precio,cantidad as stock,marca,categoria,descuento,img 
+        FROM productos as p
+          inner join categorias as c on p.id_categoria=c.id_categoria
+          inner join marcas as m on p.id_marca=m.id_marca";
+      $stmt = $db->prepare($sql);
+      $stmt->execute();
+      //$variable = $stmt->fetchAll(PDO::FETCH_ASSOC);//array asociado
+      $variable = $stmt->fetchAll(PDO::FETCH_CLASS,"Producto");//objeto
+      $stmt->closeCursor();
+      return $variable;  
+    } catch (\Exception $e) {
+      echo "Error al obtener Lista de Productos";
+      $e->getMessage();
+      return false;
+    }
+    
+  }
 
 
   /**
