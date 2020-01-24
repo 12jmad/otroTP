@@ -47,29 +47,30 @@ class Producto
  
   }
 
-  public function modificarProducto(int $id,string $nombre, string $desc,float $precio,int $stock, int $marca, int $categoria, float $descuento, string $img)
+  public function modificarProducto(int $id,string $img)
   {
     $db=Conexion::conectar();
-    try{
-      $sql="UPDATE productos SET nombre=':nombre',descripcion=':descripcion',precio=:precio,cantidad=:cantidad,img=':img',descuento=:descuento,id_marca=:idMarca,id_categoria=:idCategoria WHERE id_producto = :id";
+    $nombre = $_POST["nombre"];
+    $desc = $_POST["descripcion"];
+    $precio= $_POST["precio"];
+    $stock = $_POST["stock"];
+    $marca = $_POST["marca"];
+    $categoria = $_POST["categoria"];
+    $descuento = $_POST["descuento"];
+      $sql="UPDATE productos SET nombre=:nombre, descripcion=:descripcion, precio=:precio, cantidad=:cantidad, img=:img, descuento=:descuento, id_marca=:idMarca, id_categoria=:idCategoria WHERE id_producto =:id";
       $statement = $db->prepare($sql);
-      $statement->bindValue(':id', $id,PDO::PARAM_INT);
-      $statement->bindValue(':idMarca', $marca,PDO::PARAM_INT);
-      $statement->bindValue(":idCategoria", $categoria,PDO::PARAM_INT);
       $statement->bindValue(":nombre", $nombre,PDO::PARAM_STR);
-      $statement->bindValue(":descripcion", $desc,PDO::PARAM_STR);
+      $statement->bindValue(":descripcion", $desc);
       $statement->bindValue(":precio", $precio);
       $statement->bindValue(":cantidad", $stock,PDO::PARAM_INT);
       $statement->bindValue(":img", $img,PDO::PARAM_STR);
       $statement->bindValue(":descuento", $descuento);
-  
+      $statement->bindValue(':idMarca', $marca,PDO::PARAM_INT);
+      $statement->bindValue(":idCategoria", $categoria,PDO::PARAM_INT);
+      $statement->bindValue(':id', $id,PDO::PARAM_INT);
       $statement->execute();
-      $statement->closeCursor();
-      }catch (\Exception $e)
-        {
-          echo "Error al modificar poducto";
-          $e->getMessage();
-        }
+
+      
   }
 
   public function borrarProducto($id)
@@ -133,6 +134,26 @@ class Producto
     
   }
 
+  function buscarMarca(PDO $db) {
+    $nombre="%".$_GET["buscador"]."%";
+          try
+      {
+  
+        $statement = $db->prepare("SELECT nombre FROM marcas WHERE nombre LIKE :nombre");
+  
+        $statement->bindValue(":nombre",$nombre);
+  
+        $statement->execute();
+        $variable=$statement->fetchAll(PDO::FETCH_ASSOC);
+        return $variable; 
+      }
+      catch (\Exception $e)
+      {
+          
+          $e->getMessage();
+        return false;
+      }
+  }
 
   /**
    * Get the value of id
