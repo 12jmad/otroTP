@@ -6,11 +6,6 @@
     class Categoria
     {
 
-      function __construct(argument)
-      {
-        // code...
-      }
-
       private $id;
       private $categoria;
 

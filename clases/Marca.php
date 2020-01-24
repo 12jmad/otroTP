@@ -6,11 +6,6 @@
 class Marca
 {
 
-  function __construct(argument)
-  {
-    // code...
-  }
-
   private $id;
   private $marca;
 
