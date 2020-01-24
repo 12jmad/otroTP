@@ -6,11 +6,14 @@
     class Categoria
     {
 
+<<<<<<< HEAD
       function __construct(argument)
       {
         // code...
       }
 
+=======
+>>>>>>> 35de5664e2c3b65f696137834099d6e6b4892312
       private $id;
       private $categoria;
 
