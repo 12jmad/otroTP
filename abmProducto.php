@@ -5,24 +5,6 @@ require_once 'clases/Producto.php';
 
 
 $producto = new Producto();
-function obtenerListaProductos($db){
-  try {
-    $sql = "SELECT id_producto as id,nombre,descripcion,precio,cantidad as stock,marca,categoria,descuento,img 
-      FROM productos as p
-        inner join categorias as c on p.id_categoria=c.id_categoria
-        inner join marcas as m on p.id_marca=m.id_marca";
-    $stmt = $db->prepare($sql);
-    $stmt->execute();
-    //$variable = $stmt->fetchAll(PDO::FETCH_ASSOC);//array asociado
-    $variable = $stmt->fetchAll(PDO::FETCH_CLASS,"Producto");//objeto
-    $stmt->closeCursor();
-    return $variable;  
-  } catch (\Exception $e) {
-    echo "Error al obtener Lista de Productos";
-    $e->getMessage();
-  }
-  
-}
 function obtenerListaMarcas(){
   $db=Conexion::conectar();
   try {
@@ -103,140 +85,6 @@ if ($_POST) {
     <div class="container">
       <div id="accordion">
         <div class="card">
-          <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-              <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"  aria-controls="collapseOne">
-                Agregar Productos
-              </button>
-            </h5>
-          </div>
-
-          <div id="collapseOne" class ="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
-              <form class="altaProducto" action="" method="post" enctype="multipart/form-data">
-
-              <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" name="nombre">
-                </div>
-                <div class="form-group">
-                  <label for="descripcion">Descripcion</label>
-                  <textarea class="form-control" id="descripcion" rows="8" cols="80" name="descripcion" value=""></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="precio">Precio:</label>
-                  <input type="number" class="form-control " id="precio" name="precio" min="0" value="0" >
-                </div>
-                <div class="form-group">
-                  <label for="stock">stock</label>
-                  <input type="number" class="form-control" id="stock" name="stock" min="0" value="0">
-                </div>
-                <div class="form-group">
-                  <label for="marca">Marca</label>
-                  <select class="form-control" id="marca" name="marca">
-                    <?php 
-                      $marcas=obtenerListaMarcas($db);
-                      foreach ($marcas as $key => $value) { 
-                    ?>
-                      <option value="<?=$value["id_marca"];?>"><?=$value["marca"];?></option>
-                    <?php 
-                      } 
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="categoria">Categoria</label>
-                  <select class="form-control" id="categoria" name="categoria">
-                  <?php 
-                      $marcas=obtenerListaCategorias($db);
-                      foreach ($marcas as $key => $value) { 
-                    ?>
-                      <option value="<?=$value["id_categoria"];?>"><?=$value["categoria"];?></option>
-                    <?php 
-                      } 
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="descuento">descuento</label>
-                  <input type="number" class="form-control" id="descuento" name="descuento" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                  <label for="img">Imagen</label>
-                  <input type="file" class="form-control-file" id="img" name="img">
-                </div>
-                <button type="submit" class="btn btn-primary mb-2" name="btnCargar" value="cargar">Cargar</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" id="headingTwo">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Modificar Productos
-              </button>
-            </h5>
-          </div>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-              <form class="modificarProducto" action="modificarProducto.php" method="post">
-                <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" name="nombre" value="">
-                </div>
-                <div class="form-group">
-                  <label for="descripcion">Descripcion</label>
-                  <textarea class="form-control" id="descripcion" rows="8" cols="80" name="descripcion"></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="precio">Precio:</label>
-                  <input type="number" class="form-control" id="precio" name="precio" min="0" value="">
-                </div>
-                <div class="form-group">
-                  <label for="stock">stock</label>
-                  <input type="number" class="form-control" id="stock" name="stock" min="0" value="">
-                </div>
-                <div class="form-group">
-                  <label for="marca">Marca</label>
-                  <select class="form-control" id="marca" name="marca">
-                    <?php 
-                      $marcas=obtenerListaMarcas($db);
-                      foreach ($marcas as $key => $value) { 
-                    ?>
-                      <option value="<?=$value["id_marca"];?>"><?=$value["marca"];?></option>
-                    <?php 
-                      } 
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="categoria">Categoria</label>
-                  <select class="form-control" id="categoria" name="categoria">
-                  <?php 
-                      $marcas=obtenerListaCategorias($db);
-                      foreach ($marcas as $key => $value) { 
-                    ?>
-                      <option value="<?=$value["id_categoria"];?>"><?=$value["categoria"];?></option>
-                    <?php 
-                      } 
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="descuento">descuento</label>
-                  <input type="number" class="form-control" id="descuento" name="descuento" min="0" max="100" value="">
-                </div>
-                <div class="form-group">
-                  <label for="img">Imagen</label>
-                  <input type="file" class="form-control-file" id="img" name="img">
-                </div>
-                <button type="submit" class="btn btn-primary mb-2" name="modificar_id">Modificar</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="card">
           <div class="card-header" id="headingThree">
             <h5 class="mb-0">
               <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -259,9 +107,10 @@ if ($_POST) {
         <div class="card">
           <div class="card-header" id="headingFour">
             <h5 class="mb-0">
-              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              <button class="btn btn-link mr-3 collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                 Lista de Productos
               </button>
+              <a href="agregarProducto.php" class="btn btn-primary ml-3">Agregar</a>
             </h5>
           </div>
           <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
@@ -311,8 +160,48 @@ if ($_POST) {
                       </div>
                       <div class="form-group mb-2 col-1">
 
-                        <span class="form-control-plaintext text-center" >Aqui</span>
+                        <span class="form-control-plaintext text-center" >
+                          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
+                            Ver
+                          </button>
+                        </span>
                       </div>
+                      <!--modal de descripcion -->
+                      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenterTitle">Descripcion</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                             <!-- <p>
+                                <pre>
+                                  <?=$value->getDescripcion();?>
+                                </pre>
+                              </p>
+                              -->
+                              <?php 
+                                  $array=explode(PHP_EOL,$value->getDescripcion());
+                                  foreach ($array as $key => $caracteristica) {?>
+                                    <ul type="circle">
+                                      <li >
+                                        <?=$caracteristica;?>
+                                      </li>
+                                    </ul>
+                                  <?php
+                                  }
+                                  ?>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--modal de descripcion -->
                       <div class="form-group mb-2 col-1">
 
                         <span class="form-control-plaintext text-center" >$ <?=$value->getPrecio();?></span>
@@ -327,15 +216,15 @@ if ($_POST) {
                       </div>
                       <div class="form-group mb-2 col-1 px-1">
 
-                        <span class="form-control-plaintext text-center" ><?=$value->getCategoria();?></span>
+                        <span class="form-control-plaintext text-centerd-block" ><?=$value->getCategoria();?></span>
                       </div>
                       <div class="form-group mb-2 col-1 px-1">
 
-                        <span class="form-control-plaintext text-center" ><?=$value->getDescuento();?>%</span>
+                        <span class="form-control-plaintext text-center d-block" ><?=$value->getDescuento();?>%</span>
                       </div>
                       <div class="form-group mb-2 col-2 text-center">
 
-                        <img src="<?=$value->getImg();?>" alt="" sizes="30px">
+                        <img src="<?=$value->getImg();?>" alt="" sizes="" width="80%">
                       </div>
                       <div class="form-group mb-2 col-12 text-center">
                         <button type="submit" class="btn btn-primary mx-2 mb-1 " name="modificar_l" value="<?=$value->getId();?>">Modificar</button>
