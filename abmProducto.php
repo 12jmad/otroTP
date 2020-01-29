@@ -1,8 +1,11 @@
 <?php
-require_once ('includes/pdo.php');
+//require_once ('includes/pdo.php');
 require_once 'clases/Conexion.php';
 require_once 'clases/Producto.php';
-
+require_once 'clases/Marca.php';
+require_once 'clases/Categoria.php';
+include_once("includes/funciones.php");
+include_once("includes/baseDeDatos.php");
 
 $producto = new Producto();
 function obtenerListaMarcas(){
@@ -36,7 +39,7 @@ function obtenerListaCategorias(){
     $e->getMessage();
   }
 }
-$variable=$producto->obtenerListaProductos($db);
+$variable=$producto->obtenerListaProductos();
 //var_dump($variable);
 if ($_POST) {
  // var_dump($_POST);
@@ -49,71 +52,42 @@ if ($_POST) {
     $marca = $_POST["marca"];
     $categoria = $_POST["categoria"];
     $descuento = $_POST["descuento"];
-    $img = "img/productos/phone.jpg";//$_POST["img"]; esto lo deje asi para que funciones pero tendria que ir la direccion
-
+    if($_FILES["img"]["name"]!="" && $_FILES){
+      $img=Producto::guardarArchivo($_FILES["img"],$_POST["nombre"]);  
+    }else{
+      $img="img/productos/phone.jpg";
+    }
     $producto->altaProducto($img);
   }elseif (isset($_POST["btnBorrar"])) {
     $id = $_POST["id"];
 
     $producto->borrarProducto($id);
   }
-  if (isset($_POST["modificar_id"])) {
-    $id=2;//de alguna manera le tiene que llegar un id 
-    $nombre = $_POST["nombre"];
-    $descripcion = $_POST["descripcion"];
-    $precio= $_POST["precio"];
-    $stock = $_POST["stock"];
-    $marca = $_POST["marca"];
-    $categoria = $_POST["categoria"];
-    $descuento = $_POST["descuento"];
-    $img = "img/productos/phone.jpg";
-    $producto->modificarProducto($id,$nombre, $descripcion,$precio, $stock, $marca, $categoria, $descuento, $img);
-  }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <?php include 'includes/head.php';?>
-<title>ABM Productos</title>
-
+<title>Productos</title>
 <body>
 
   <?php include 'includes/headerAdm.php'; ?>
 
   <main>
     
-    <div class="container">
+    <div class="container-fluir my-3">
       <div id="accordion">
         <div class="card">
-          <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Eliminar Productos
-              </button>
-            </h5>
-          </div>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-              <form class="borrarProducto" action="" method="post">
-                <label for="id">Id del producto que se desea borrar</label>
-                <br>
-                <input type="number" min=1 name="id" value="">
-
-                <button type="submit" name="btnBorrar" value="borrar">Borrar</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header" id="headingFour">
-            <h5 class="mb-0">
+          <div class="card-header " id="headingFour">
+            <h5 class="mb-0 d-flex justify-content-between">
               <button class="btn btn-link mr-3 collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                 Lista de Productos
               </button>
-              <a href="agregarProducto.php" class="btn btn-primary ml-3">Agregar</a>
+              <a href="agregarProducto.php" class="btn btn-primary ml-3 ">Agregar</a>
+              <a href="admin.php" class="btn btn-primary ml-3">Volver a principal</a>
             </h5>
           </div>
-          <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+          <div id="collapseFour" class="collapse carrito-resumen" aria-labelledby="headingFour" data-parent="#accordion">
             <ul class="list-group">
               <li class="list-group-item">
                 <div class="card-body form-inline d-flex justify-content-between px-0">
@@ -142,15 +116,15 @@ if ($_POST) {
                       <span  class="d-block form-control-plaintext text-center">Descuento</span>
                   </div>
                   <div class="form-group mb-1 col-2 px-1" >
-                      <span  class="d-block text-center form-control-plaintext text-center">Imagen</span>
+                      <span  class="d-block text-center form-control-plaintext text-center ">Imagen</span>
                   </div>
                 </div>
               </li>
               <?php foreach ($variable as $key => $value) { ?>
 
                 <li class="list-group-item">
-                  <div class="card-body d-flex justify-content-between px-0">
-                    <form class="form-inline" action="modificarProducto.php" method="post">
+                  <div class="card-body  px-0">
+                    <form class="form-inline d-flex justify-content-between " action="modificarProducto.php" method="post">
                       <div class="form-group mb-1 col-1 px-1" >
                         <input type="text" readonly class="form-control-plaintext text-center" id="id" value="<?=$value->getId();?>" name="id">
                       </div>
@@ -216,7 +190,7 @@ if ($_POST) {
                       </div>
                       <div class="form-group mb-2 col-1 px-1">
 
-                        <span class="form-control-plaintext text-centerd-block" ><?=$value->getCategoria();?></span>
+                        <span class="form-control-plaintext text-center d-block" ><?=$value->getCategoria();?></span>
                       </div>
                       <div class="form-group mb-2 col-1 px-1">
 
@@ -224,11 +198,44 @@ if ($_POST) {
                       </div>
                       <div class="form-group mb-2 col-2 text-center">
 
-                        <img src="<?=$value->getImg();?>" alt="" sizes="" width="80%">
+                        <img src="<?=$value->getImg();?>" alt="" sizes="" width="80%" class="zoom">
                       </div>
                       <div class="form-group mb-2 col-12 text-center">
                         <button type="submit" class="btn btn-primary mx-2 mb-1 " name="modificar_l" value="<?=$value->getId();?>">Modificar</button>
-                        <button type="submit" class="btn btn-primary mx-2 mb-1 " name="eliminar_l" value="<?=$value->getId();?>">Eliminar</button>
+                        
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary mx-2 mb-1 " name="eliminar_l" value="<?=$value->getId();?>" data-toggle="modal" data-target="#eliminar<?=$value->getId();?>Modal">
+                            Eliminar
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="eliminar<?=$value->getId();?>Modal" tabindex="-1" role="dialog" aria-labelledby="eliminar<?=$value->getId();?>ModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content text-center">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="eliminar<?=$value->getId();?>ModalLabel">Desea eliminar este producto?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body d-flex align-items-center justify-content-center flex-wrap">
+                                <div class="form-group mb-2 col-10 px-1 ">
+                                  <span  class="form-control-plaintext " ><?=$value->getNombre();?></span>
+                                </div>
+                                <div class="form-group mb-2 col-5 text-center">
+
+                                  <img src="<?=$value->getImg();?>" alt="" sizes="" width="80%" class="">
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary mx-2 mb-1 " name="btnBorrar" value="<?=$value->getId();?>">Eliminar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
                       </div>
                     </form>
                   </div>

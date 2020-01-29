@@ -36,6 +36,15 @@ CREATE TABLE `carritos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `carritos`
+--
+
+LOCK TABLES `carritos` WRITE;
+/*!40000 ALTER TABLE `carritos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `carritos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categorias`
 --
 
@@ -47,8 +56,18 @@ CREATE TABLE `categorias` (
   `categoria` varchar(100) NOT NULL,
   PRIMARY KEY (`id_categoria`),
   UNIQUE KEY `id_categoria_UNIQUE` (`id_categoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categorias`
+--
+
+LOCK TABLES `categorias` WRITE;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+INSERT INTO `categorias` VALUES (1,'Celular');
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `detalle_de_productos`
@@ -75,6 +94,15 @@ CREATE TABLE `detalle_de_productos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `detalle_de_productos`
+--
+
+LOCK TABLES `detalle_de_productos` WRITE;
+/*!40000 ALTER TABLE `detalle_de_productos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalle_de_productos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `detalle_productos_comprados`
 --
 
@@ -96,6 +124,15 @@ CREATE TABLE `detalle_productos_comprados` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `detalle_productos_comprados`
+--
+
+LOCK TABLES `detalle_productos_comprados` WRITE;
+/*!40000 ALTER TABLE `detalle_productos_comprados` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalle_productos_comprados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `direcciones`
 --
 
@@ -113,6 +150,15 @@ CREATE TABLE `direcciones` (
   UNIQUE KEY `id_direccion_UNIQUE` (`id_direccion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `direcciones`
+--
+
+LOCK TABLES `direcciones` WRITE;
+/*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `envios`
@@ -136,6 +182,15 @@ CREATE TABLE `envios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `envios`
+--
+
+LOCK TABLES `envios` WRITE;
+/*!40000 ALTER TABLE `envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `envios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `estado_producto`
 --
 
@@ -151,19 +206,13 @@ CREATE TABLE `estado_producto` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `estados`
+-- Dumping data for table `estado_producto`
 --
 
-DROP TABLE IF EXISTS `estados`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `estados` (
-  `id_estados` int(11) NOT NULL AUTO_INCREMENT,
-  `estado` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_estados`),
-  UNIQUE KEY `id_estados_UNIQUE` (`id_estados`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `estado_producto` WRITE;
+/*!40000 ALTER TABLE `estado_producto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estado_producto` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `estados_envios`
@@ -180,6 +229,15 @@ CREATE TABLE `estados_envios` (
   UNIQUE KEY `id_estado_de_envio_UNIQUE` (`id_estado_de_envio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `estados_envios`
+--
+
+LOCK TABLES `estados_envios` WRITE;
+/*!40000 ALTER TABLE `estados_envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estados_envios` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `facturas`
@@ -214,6 +272,15 @@ CREATE TABLE `facturas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `facturas`
+--
+
+LOCK TABLES `facturas` WRITE;
+/*!40000 ALTER TABLE `facturas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `facturas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `marcas`
 --
 
@@ -226,8 +293,18 @@ CREATE TABLE `marcas` (
   PRIMARY KEY (`id_marca`),
   UNIQUE KEY `nombre_UNIQUE` (`marca`),
   UNIQUE KEY `id_marca_UNIQUE` (`id_marca`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `marcas`
+--
+
+LOCK TABLES `marcas` WRITE;
+/*!40000 ALTER TABLE `marcas` DISABLE KEYS */;
+INSERT INTO `marcas` VALUES (3,'Apple'),(2,'LG'),(4,'Motorola'),(1,'Nokia'),(5,'Samsung');
+/*!40000 ALTER TABLE `marcas` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `productos`
@@ -244,16 +321,26 @@ CREATE TABLE `productos` (
   `cantidad` int(11) NOT NULL,
   `descripcion` varchar(1000) DEFAULT NULL,
   `precio` float unsigned NOT NULL DEFAULT 0,
-  `img` varchar(45) NOT NULL,
-  `descuento` float DEFAULT NULL,
+  `img` varchar(10000) NOT NULL,
+  `descuento` float DEFAULT 0,
   PRIMARY KEY (`id_producto`),
   UNIQUE KEY `id_producto_UNIQUE` (`id_producto`),
   KEY `id_marca_idx` (`id_marca`),
   KEY `id_categoria_idx` (`id_categoria`),
   CONSTRAINT `id_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `id_marca` FOREIGN KEY (`id_marca`) REFERENCES `marcas` (`id_marca`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `productos`
+--
+
+LOCK TABLES `productos` WRITE;
+/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` VALUES (1,1,1,'Nokia 7.1',23,'                                  \r\n\r\n    Cámara secundaria: 8 mpx\r\n    Sistema Operativo: Android 9.0\r\n    Tipo de SIM: Nano-SIM\r\n    Red: 2G, 3G, 4G\r\n    Frecuencia 2G: 850/900/1800/1900 MHz\r\n    Frecuencia 3G: 850/900/1700/1900/2100 MHz\r\n    Frecuencia 4G: Bandas 1, 2, 3, 4, 5, 7, 8, 12, 17, 28, 40.\r\n    Batería: 3060 mAh\r\n    Batería en modo Stand By: 408 h\r\n    Tiempo de conversación: 19 h\r\n    Memoria RAM: 4 GB\r\n    Memoria Interna: 64 GB | Disponibles 50 GB\r\n    Memoria Externa: MicroSD hasta 256 GB\r\n    Peso: 160 g\r\n    Dimensión del equipo: 149,7 x 71,2 x 8 mm\r\n    Bluetooth: Si\r\n    Marcación por Voz: Si\r\n    Llamadas por WiFi: Si                  ',29000,'img/productos/Nokia 7.1/phone5e3195b051393.jpg',0);
+/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `sexos`
@@ -270,6 +357,15 @@ CREATE TABLE `sexos` (
   UNIQUE KEY `id_sexo_UNIQUE` (`id_sexo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sexos`
+--
+
+LOCK TABLES `sexos` WRITE;
+/*!40000 ALTER TABLE `sexos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sexos` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tarjetas`
@@ -292,6 +388,15 @@ CREATE TABLE `tarjetas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tarjetas`
+--
+
+LOCK TABLES `tarjetas` WRITE;
+/*!40000 ALTER TABLE `tarjetas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tarjetas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipo_entrega`
 --
 
@@ -306,6 +411,15 @@ CREATE TABLE `tipo_entrega` (
   UNIQUE KEY `id_tipo_entrega_UNIQUE` (`id_tipo_entrega`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_entrega`
+--
+
+LOCK TABLES `tipo_entrega` WRITE;
+/*!40000 ALTER TABLE `tipo_entrega` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_entrega` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tipo_envios`
@@ -323,6 +437,15 @@ CREATE TABLE `tipo_envios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tipo_envios`
+--
+
+LOCK TABLES `tipo_envios` WRITE;
+/*!40000 ALTER TABLE `tipo_envios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_envios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipo_factura`
 --
 
@@ -336,6 +459,15 @@ CREATE TABLE `tipo_factura` (
   UNIQUE KEY `id_tipo_factura_UNIQUE` (`id_tipo_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_factura`
+--
+
+LOCK TABLES `tipo_factura` WRITE;
+/*!40000 ALTER TABLE `tipo_factura` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_factura` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tipo_tarjeta`
@@ -354,6 +486,15 @@ CREATE TABLE `tipo_tarjeta` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tipo_tarjeta`
+--
+
+LOCK TABLES `tipo_tarjeta` WRITE;
+/*!40000 ALTER TABLE `tipo_tarjeta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_tarjeta` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipo_usuario`
 --
 
@@ -368,6 +509,15 @@ CREATE TABLE `tipo_usuario` (
   UNIQUE KEY `id_tipo_cliente_UNIQUE` (`id_tipo_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_usuario`
+--
+
+LOCK TABLES `tipo_usuario` WRITE;
+/*!40000 ALTER TABLE `tipo_usuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_usuario` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `usuarios`
@@ -411,6 +561,15 @@ CREATE TABLE `usuarios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `usuarios`
+--
+
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping events for database 'e-commerce'
 --
 
@@ -427,4 +586,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-22 21:17:49
+-- Dump completed on 2020-01-29 11:28:32

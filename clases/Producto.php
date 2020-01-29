@@ -93,6 +93,40 @@ class Producto
     }
 
   }
+  static function guardarArchivo($file,$nombre="text"){
+    if($file["name"]!=""){
+        $nombreArchivo=$file["name"];
+    $archivo=$file["tmp_name"];
+    $ext=pathinfo($nombreArchivo,PATHINFO_EXTENSION);
+    $miArchivo="img/productos/".$nombre;
+     //ruta actual
+    $nombre="phone".uniqid();
+    if (!file_exists($miArchivo)) {
+        mkdir($miArchivo, 0777, true);
+    }
+    $directorio = opendir($miArchivo);
+    $cont=0;
+    $archivoEliminar="";
+    while ($archivoDir = readdir($directorio)) //obtenemos un archivo y luego otro sucesivamente
+    {
+        if (!is_dir($archivoDir))//verificamos si es o no un directorio
+            {
+        //var_dump ($archivoDir );
+            if(preg_match("/phone/i" ,$archivoDir)){//encuentra un archivo que coincida con el patron
+                $cont++;
+                $archivoEliminar=$archivoDir;   
+            }
+        }
+    }
+    if($cont>1){
+        unlink($miArchivo."/".$archivoEliminar);
+    }
+    $miArchivo=$miArchivo."/".$nombre.".".$ext;
+    move_uploaded_file($archivo,$miArchivo);
+    return $miArchivo;
+    }
+    return null;
+  }
   public function buscarPorId(int $id){
     $db=Conexion::conectar();
     if(isset($_POST["id"])){
